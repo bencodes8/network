@@ -1,14 +1,26 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
 
-from .models import User
+from .models import User, Post
 
-
-def index(request):
-    return render(request, "network/index.html")
+@csrf_exempt
+def index(request): 
+    # User submits a post
+    if request.method == "POST" and request.user.is_authenticated:
+        title = request.POST["title"]
+        post = request.POST["post"]
+        new_post = Post.objects.create(user=request.user, title=title, post=post)
+        new_post.save()
+    
+    return render(request, "network/index.html", {
+        "title": "All Posts",
+    })
 
 
 def login_view(request):
