@@ -17,11 +17,25 @@ def index(request):
         post = request.POST["post"]
         new_post = Post.objects.create(user=request.user, title=title, post=post)
         new_post.save()
-    
+        
+    posts = Post.objects.all().order_by('-date')
+    posts_data = [post.serialize() for post in posts]
+
     return render(request, "network/index.html", {
         "title": "All Posts",
+        "api_route": "posts",
+        "posts_json": json.dumps(posts_data),
     })
 
+def profile(request, user_id):
+    posts = Post.objects.all().filter(user=user_id)
+    user = User.objects.get(pk=user_id).username
+    
+    
+    return render(request, "network/profile.html", {
+        "title": f"@{user} · Profile",
+        
+    })  
 
 def login_view(request):
     if request.method == "POST":
