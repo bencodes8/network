@@ -5,7 +5,7 @@ from django.db import models
 class User(AbstractUser):
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
-    liked_posts = models.ManyToManyField('Post', verbose_name='Liked Posts', related_name='user_liked_posts')
+    liked_posts = models.ManyToManyField('Post', verbose_name='Liked Posts', related_name='user_liked_posts', blank=True)
     
 
 class Post(models.Model):
