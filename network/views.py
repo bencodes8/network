@@ -20,22 +20,21 @@ def index(request):
         
     posts = Post.objects.all().order_by('-date')
     posts_data = [post.serialize() for post in posts]
-    print('test')
-
+    
     return render(request, "network/index.html", {
         "title": "All Posts",
-        "api_route": "posts",
         "posts_json": json.dumps(posts_data),
     })
 
 def profile(request, user_id):
-    posts = Post.objects.all().filter(user=user_id)
+    posts = Post.objects.all().filter(user=user_id).order_by('-date')
     user = User.objects.get(pk=user_id).username
     
+    profile_posts_data = [post.serialize() for post in posts]
     
     return render(request, "network/profile.html", {
-        "title": f"@{user} · Profile",
-        
+        "title": f"@{user}'s Profile",
+        "posts_json": json.dumps(profile_posts_data)
     })  
 
 def login_view(request):
