@@ -20,6 +20,7 @@ def index(request):
         
     posts = Post.objects.all().order_by('-date')
     posts_data = [post.serialize() for post in posts]
+    print('test')
 
     return render(request, "network/index.html", {
         "title": "All Posts",
