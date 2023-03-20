@@ -3,7 +3,7 @@
 
 {% block title %} {{ title }} {% endblock %}
 
-{% block static %}<link href="{% static 'network/index.css'%}" rel="stylesheet">{% endblock%}
+{% block static %}<link href="{% static 'network/index.css' %}" rel="stylesheet">{% endblock%}
 
 {% block body %}
 <div id="create-post"></div>
@@ -102,12 +102,12 @@
                     <span className="post-date">{props.date}</span>
                 </div>
             </div>
-
           </div>
         );
       }
     
-    var apiRoute = '{{ api_route }}'
+    const postData = {{ posts_json|safe }}; 
+
 
     const postContainer = document.getElementById('create-post');
     const postRoot = ReactDOM.createRoot(postContainer);
@@ -115,25 +115,18 @@
     const allPostContainer = document.getElementById('post-list');
     const allPostRoot = ReactDOM.createRoot(allPostContainer);
 
-    async function renderPosts() {
-        const response = await fetch(`/api/${apiRoute}`)
-        const data = await response.json()
-        const postsData = data;
+    postRoot.render(<CreatePost />);
+    allPostRoot.render(postData.map((posts) => 
+    <Posts 
+    key={posts.id}
+    userId ={posts.user_id}
+    user={posts.user}
+    title={posts.title} 
+    post={posts.post}
+    likes={posts.likes}
+    date={posts.date}
+    />));
 
-        postRoot.render(<CreatePost />);
-        allPostRoot.render(postsData.map((posts) => 
-        <Posts 
-        key={posts.id}
-        userId ={posts.user_id}
-        user={posts.user}
-        title={posts.title} 
-        post={posts.post}
-        likes={posts.likes}
-        date={posts.date}
-        />))
-    }
-
-    renderPosts();
 </script>   
 
 {% endblock %}
