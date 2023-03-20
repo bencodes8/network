@@ -6,7 +6,11 @@
 {% block static %}<link href="{% static 'network/index.css' %}" rel="stylesheet">{% endblock%}
 
 {% block body %}
+
+{% if user.is_authenticated %}
 <div id="create-post"></div>
+{% endif %}
+
 <div id="post-list"></div>
 
 
