@@ -14,7 +14,6 @@ def view_all_posts(request):
     # Get start and end points
     start = request.GET.get('start', 0)
     end = request.GET.get('end', int(start) + 9)
-    print('test')
     
     # Return posts as JSON
     posts = Post.objects.all().order_by('-date')[int(start):int(end)]
