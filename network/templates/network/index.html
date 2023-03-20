@@ -1,5 +1,139 @@
 {% extends "network/layout.html" %}
+{% load static %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block static %}<link href="{% static 'network/index.css'%}" rel="stylesheet">{% endblock%}
 
 {% block body %}
-    TODO
+<div id="create-post"></div>
+<div id="post-list"></div>
+
+
+<script type="text/babel">
+    function CreatePost() {
+        const [showComponent, setShowComponent] = React.useState(false);
+        const divRef = React.useRef(null);
+        const extendPostRef = React.useRef(null);
+
+        function handleClick () {
+            setShowComponent(true);
+        }
+
+        React.useEffect(() => {
+            function handleClickOutside(event) {
+                if (divRef.current && !divRef.current.contains(event.target) && extendPostRef.current && !extendPostRef.current.contains(event.target)) {
+                    setShowComponent(false);
+                }
+            }
+
+            document.addEventListener('mousedown', handleClickOutside);
+
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+            
+        }, [divRef, showComponent]);
+
+        const ExtendPost = React.forwardRef((props, ref) => {
+            return (
+                <>
+                    <textarea
+                    name="post" 
+                    className="form-control m-2" 
+                    placeholder="Elaborate..." 
+                    {...props} 
+                    ref={ref}
+                    required
+                    />
+
+                    <input 
+                    className="btn btn-warning btn-sm m-2" 
+                    type="submit"
+                    />
+                </>
+            );
+        });
+
+        return (
+            <>
+                <div ref={divRef}>
+                    <h4 className="m-2">Create New Post</h4>
+                    <form method="post">
+                        <input 
+                        id="title"
+                        name="title" 
+                        className="form-control m-2" 
+                        type="text" 
+                        placeholder="What's on your mind?"
+                        onClick = {handleClick}
+                        required
+                        />
+                        {showComponent && <ExtendPost ref={extendPostRef}/>}
+                    </form>
+                </div>
+                <hr />
+            </>
+        );
+    }
+
+    function Posts(props) {
+        return (
+          <div className="post-container">
+            <div className="title-container">
+                <h3>{props.title}</h3>
+            </div>   
+            <hr/>
+
+            <div className="content-container">
+                <div className="body-container">
+                    <p className="left-text">{props.post}</p>
+                </div>
+                <hr/>
+                <div className="bottom">
+                    <span className="post-user"><a href={`/profile/${props.userId}`}>{props.user}</a></span>
+                    <span className="post-likes">
+                        {props.likes}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+                         </svg>
+                    </span>
+                    <span className="post-date">{props.date}</span>
+                </div>
+            </div>
+
+          </div>
+        );
+      }
+    
+    var apiRoute = '{{ api_route }}'
+
+    const postContainer = document.getElementById('create-post');
+    const postRoot = ReactDOM.createRoot(postContainer);
+
+    const allPostContainer = document.getElementById('post-list');
+    const allPostRoot = ReactDOM.createRoot(allPostContainer);
+
+    async function renderPosts() {
+        const response = await fetch(`/api/${apiRoute}`)
+        const data = await response.json()
+        const postsData = data;
+
+        postRoot.render(<CreatePost />);
+        allPostRoot.render(postsData.map((posts) => 
+        <Posts 
+        key={posts.id}
+        userId ={posts.user_id}
+        user={posts.user}
+        title={posts.title} 
+        post={posts.post}
+        likes={posts.likes}
+        date={posts.date}
+        />))
+    }
+
+    renderPosts();
+</script>   
+
 {% endblock %}
