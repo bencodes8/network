@@ -3,10 +3,17 @@ from django.db import models
 
 
 class User(AbstractUser):
-    followers = models.IntegerField(default=0)
-    following = models.IntegerField(default=0)
+    followers_count = models.IntegerField(default=0)
+    following_count = models.IntegerField(default=0)
     liked_posts = models.ManyToManyField('Post', verbose_name='Liked Posts', related_name='user_liked_posts', blank=True)
+    followers = models.ManyToManyField('self', verbose_name='Followers', symmetrical=False, related_name='user_followers', blank=True)
+    following = models.ManyToManyField('self', verbose_name='Following', symmetrical=False, related_name='user_following', blank=True)
     
+    def get_followers(self):
+        return self.user_followers.exclude(pk=self.pk)
+    
+    def get_following(self):
+        return self.user_followers.exclude(pk=self.pk)
 
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
