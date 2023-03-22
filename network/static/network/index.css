@@ -10,6 +10,10 @@
     text-align: left;
 }
 
+.center-text {
+    text-align: center;
+}
+
 .post-container {
     position: relative;
     min-height: 200px;
@@ -67,5 +71,22 @@
 
 .bottom > span > a {
     text-decoration: none;
+}
+
+#follow-status {
+    display: flex;
+    justify-content: center;
+}
+
+#follow-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.follow-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
 }
 
