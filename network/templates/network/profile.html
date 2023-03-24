@@ -1,7 +1,38 @@
 {% extends "network/layout.html" %}
+
 {% load static %}
 
-{% block title %} {{ title }} {% endblock%}
+{% block title %} {{ title }} {% endblock %}
 
-{% block static %} {% endblock %}
+{% block static %}<link href="{% static 'network/index.css'%}" rel="stylesheet">{% endblock %}
+
+{% block body %}
+    <div id="profile-header">
+        <div id="header-container">
+            <h3>@{{ user.username }}'s Profile</h3>
+            <button type="button" class="btn btn-primary btn-sm">Follow</button>
+        </div>
+        <div id="follow-container">
+            <div class="follow-info">
+                <span>Followers</span>
+                <span>{{ user.followers_count }}</span>
+            </div>
+            <div class="follow-info">
+                <span>Following</span>
+                <span>{{ user.following_count }}</span>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="profile-post-container">
+        <div class="row row-cols-3">
+            {% for post in posts %}
+                <div class="col">{{ post }}</div>
+            {% endfor %}
+        <div>
+    
+    </div>
+{% endblock %}
 

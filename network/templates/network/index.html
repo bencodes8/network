@@ -7,13 +7,10 @@
 
 {% block body %}
 
-{% if user.is_authenticated %}
 <div id="create-post"></div>
-{% endif %}
-
 <div id="post-list"></div>
 
-
+{% if user.is_authenticated %}
 <script type="text/babel">
     function CreatePost() {
         const [showComponent, setShowComponent] = React.useState(false);
@@ -50,7 +47,6 @@
                     ref={ref}
                     required
                     />
-
                     <input 
                     className="btn btn-warning btn-sm m-2" 
                     type="submit"
@@ -130,7 +126,7 @@
     likes={posts.likes}
     date={posts.date}
     />));
-
 </script>   
+{% endif %}
 
 {% endblock %}
