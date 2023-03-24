@@ -76,8 +76,6 @@
             </>
         );
     }
-
-    {% include 'network/profile.html' %}
     
     const postData = {{ posts_json|safe }}; 
 
@@ -85,10 +83,16 @@
     const postContainer = document.getElementById('create-post');
     const postRoot = ReactDOM.createRoot(postContainer);
 
+    postRoot.render(<CreatePost />);
+
+</script>   
+{% endif %}
+
+{% include 'network/posts.html' %}
+<script type="text/babel">
     const allPostContainer = document.getElementById('post-list');
     const allPostRoot = ReactDOM.createRoot(allPostContainer);
-
-    postRoot.render(<CreatePost />);
+    
     allPostRoot.render(postData.map((posts) => 
     <Posts 
     key={posts.id}
@@ -99,7 +103,7 @@
     likes={posts.likes}
     date={posts.date}
     />));
-</script>   
-{% endif %}
+</script>
+
 
 {% endblock %}
