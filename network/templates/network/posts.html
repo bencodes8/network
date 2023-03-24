@@ -1,0 +1,47 @@
+<script type="text/babel">
+    function Posts(props) {
+        return (
+          <div className="post-container">
+            <div className="title-container">
+                <h3>{props.title}</h3>
+            </div>   
+            <hr/>
+
+            <div className="content-container">
+                <div className="body-container">
+                    <p className="left-text">{props.post}</p>
+                </div>
+                <hr/>
+                <div className="bottom">
+                    <span className="post-user"><a href={`/profile/${props.userId}`}>{props.user}</a></span>
+                    <span className="post-likes">
+                        {props.likes}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+                         </svg>
+                    </span>
+                    <span className="post-date">{props.date}</span>
+                </div>
+            </div>
+          </div>
+        );
+      }
+
+      const postData = {{ posts_json| safe}}
+
+      const postContainer = document.getElementById('{{ postDivId }}');
+      const postRoot = ReactDOM.createRoot(postContainer);
+
+      postRoot.render(postData.map((posts) => 
+      <Posts 
+      key={posts.id}
+      userId ={posts.user_id}
+      user={posts.user}
+      title={posts.title} 
+      post={posts.post}
+      likes={posts.likes}
+      date={posts.date}
+      />));
+
+</script>
