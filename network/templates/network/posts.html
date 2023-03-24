@@ -27,4 +27,21 @@
           </div>
         );
       }
+
+      const postData = {{ posts_json| safe}}
+
+      const postContainer = document.getElementById('{{ postDivId }}');
+      const postRoot = ReactDOM.createRoot(postContainer);
+
+      postRoot.render(postData.map((posts) => 
+      <Posts 
+      key={posts.id}
+      userId ={posts.user_id}
+      user={posts.user}
+      title={posts.title} 
+      post={posts.post}
+      likes={posts.likes}
+      date={posts.date}
+      />));
+
 </script>

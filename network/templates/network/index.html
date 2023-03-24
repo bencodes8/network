@@ -76,9 +76,6 @@
             </>
         );
     }
-    
-    const postData = {{ posts_json|safe }}; 
-
 
     const postContainer = document.getElementById('create-post');
     const postRoot = ReactDOM.createRoot(postContainer);
@@ -88,22 +85,6 @@
 </script>   
 {% endif %}
 
-{% include 'network/posts.html' %}
-<script type="text/babel">
-    const allPostContainer = document.getElementById('post-list');
-    const allPostRoot = ReactDOM.createRoot(allPostContainer);
-    
-    allPostRoot.render(postData.map((posts) => 
-    <Posts 
-    key={posts.id}
-    userId ={posts.user_id}
-    user={posts.user}
-    title={posts.title} 
-    post={posts.post}
-    likes={posts.likes}
-    date={posts.date}
-    />));
-</script>
-
+{% include 'network/posts.html' with postDivId='post-list' %}
 
 {% endblock %}
