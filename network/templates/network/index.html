@@ -3,7 +3,7 @@
 
 {% block title %} {{ title }} {% endblock %}
 
-{% block static %}<link href="{% static 'network/index.css' %}" rel="stylesheet">{% endblock%}
+{% block static %}<link href="{% static "network/index.css" %}" rel="stylesheet">{% endblock%}
 
 {% block body %}
 
@@ -81,10 +81,9 @@
     const postRoot = ReactDOM.createRoot(postContainer);
 
     postRoot.render(<CreatePost />);
-
 </script>   
 {% endif %}
 
-{% include 'network/posts.html' with postDivId='post-list' %}
+{% include "network/posts.html" with postDivId='post-list' %}
 
 {% endblock %}
