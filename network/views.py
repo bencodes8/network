@@ -30,9 +30,12 @@ def profile(request, user_id):
     posts = Post.objects.all().filter(user=user_id).order_by('-date')
     user = User.objects.get(pk=user_id)
     
+    profile_posts_data = [post.serialize() for post in posts]
+    
     return render(request, "network/profile.html", {
         "title": f"@{user.username}'s Profile",
-        "posts": posts
+        "user_profile": user,
+        "profile_posts": json.dumps(profile_posts_data)
     })  
 
 def login_view(request):
