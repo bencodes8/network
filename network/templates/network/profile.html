@@ -7,32 +7,57 @@
 {% block static %}<link href="{% static 'network/index.css'%}" rel="stylesheet">{% endblock %}
 
 {% block body %}
-    <div id="profile-header">
-        <div id="header-container">
-            <h3>@{{ user.username }}'s Profile</h3>
-            <button type="button" class="btn btn-primary btn-sm">Follow</button>
-        </div>
-        <div id="follow-container">
-            <div class="follow-info">
-                <span>Followers</span>
-                <span>{{ user.followers_count }}</span>
-            </div>
-            <div class="follow-info">
-                <span>Following</span>
-                <span>{{ user.following_count }}</span>
-            </div>
-        </div>
-    </div>
-
+    <div id="profile-header"></div>
     <hr>
+    <div id="profile-post-container"></div>
 
-    <div class="profile-post-container">
-        <div class="row row-cols-3">
-            {% for post in posts %}
-                <div class="col">{}</div>
-            {% endfor %}
-        <div>
-    
-    </div>
+<script type="text/babel">
+    function ProfileHeader() {
+        return (
+            <>
+                <div id="header-container">
+                    <h3>@{{ user_profile.username }}'s Profile</h3>
+                </div>
+                <div id="follow-container">
+                    <div className="follow-info">
+                        <span>Followers</span>
+                        <span>{{ user_profile.followers_count }}</span>
+                    </div>
+                    <button type="button" className="btn btn-primary btn-sm">Follow</button>
+                    <div className="follow-info">
+                        <span>Following</span>
+                        <span>{{ user_profile.following_count }}</span>
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    const profileHeaderContainer = document.getElementById('profile-header');
+    const profileHeaderRoot = ReactDOM.createRoot(profileHeaderContainer);
+
+    profileHeaderRoot.render(<ProfileHeader />);
+</script>
+
+{% include "network/posts.html" %}
+
+<script type="text/babel">
+    const profilePostsData = {{ profile_posts | safe}}
+
+    const root = ReactDOM.createRoot(document.getElementById('profile-post-container'));
+
+    root.render(profilePostsData.map((posts) => 
+            <Posts 
+            key={posts.id}
+            userId ={posts.user_id}
+            user={posts.user}
+            title={posts.title} 
+            post={posts.post}
+            likes={posts.likes}
+            date={posts.date}
+            />
+        )
+    );
+</script>
+
 {% endblock %}
-
