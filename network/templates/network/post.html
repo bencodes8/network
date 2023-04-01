@@ -1,0 +1,42 @@
+{% for post in page_obj.object_list %}
+    <div id="post-{{ post.pk }}" class="post-container">
+        <div class="title-container {% if request.user != post.user %} with-border {% endif %}">
+            <h3>{{ post.title }}</h3>
+            {% if request.user == post.user %}
+            <button id="{{post.pk}}" class="edit-post">Edit</button>
+            {% endif %}
+        </div>
+        <hr/>
+        <div class="content-container">
+            <div class="body-container">
+                <p class="left-text">{{ post.post }}</p>
+            </div>
+            <hr/>
+            <div class="bottom">
+                <span class="post-user"><a href="{% url 'profile' post.user.username %}">{{post.user}}</a></span>
+                <span class="post-likes">
+                    <span id="likes-count">{{post.likes}}</span>
+                    {% if request.user not in post.liked_users.all %}
+                    <button id="heart-like" {% if not user.is_authenticated %} disabled {% endif%}>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="24" height="24" view-box="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+                    </svg>
+                    {% else %}
+                    <button id="heart-dislike" {% if not user.is_authenticated %} disabled {% endif %}>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" fill="red"></path>
+                     </svg>
+                    </button>
+                    {% endif %}
+                </button>
+                </span>
+                <span class="post-date">
+                    <span>{{ post.date|date:"F j, Y"}}</span>
+                    <span>{{ post.date|time:"g:i A" }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+{% endfor %}

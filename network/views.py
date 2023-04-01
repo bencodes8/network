@@ -1,4 +1,3 @@
-import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -6,37 +5,68 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.core.paginator import Paginator
 
 from .models import User, Post
 
 @csrf_exempt
-def index(request): 
-    # User submits a post
-    if request.method == "POST" and request.user.is_authenticated:
+def index(request):
+    if request.user.is_authenticated and request.method == "POST":
         title = request.POST["title"]
         post = request.POST["post"]
         new_post = Post.objects.create(user=request.user, title=title, post=post)
         new_post.save()
-        
-    posts = Post.objects.all().order_by('-date')
-    posts_data = [post.serialize() for post in posts]
+    
+    all_posts = Post.objects.all().order_by("-date")
+    paginator = Paginator(all_posts, 10)
+    
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     
     return render(request, "network/index.html", {
         "title": "All Posts",
-        "posts_json": json.dumps(posts_data),
+        "page_obj": page_obj
     })
 
-def profile(request, user_id):
-    posts = Post.objects.all().filter(user=user_id).order_by('-date')
-    user = User.objects.get(pk=user_id)
+def profile(request, slug):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(pk=request.user.id)
+    else:
+        current_user = None
+        
+    users_profile = User.objects.get(username=slug)
+    posts_profile = Post.objects.all().filter(user=users_profile.pk).order_by("-date")
     
-    profile_posts_data = [post.serialize() for post in posts]
+    paginator = Paginator(posts_profile, 10)
+    
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     
     return render(request, "network/profile.html", {
-        "title": f"@{user.username}'s Profile",
-        "user_profile": user,
-        "profile_posts": json.dumps(profile_posts_data)
-    })  
+        "title": f"@{users_profile.username}'s Profile",
+        "current_user": current_user,
+        "profile": users_profile,
+        "page_obj": page_obj
+    })
+
+@login_required(login_url='/login')
+def following(request, slug):
+    user = User.objects.get(username=slug)
+    users_following = user.following.all()
+    posts_following = Post.objects.filter(user__in=users_following).order_by("-date")     
+    
+    paginator = Paginator(posts_following, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, "network/following.html", {
+        "title": f"@{user.username}'s Following Page",
+        "user": user,
+        "followings": users_following,
+        "page_obj": page_obj
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -49,11 +79,11 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
+            messages.success(request, f"Welcome back, {user}")
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "network/login.html", {
-                "message": "Invalid username and/or password."
-            })
+            messages.error(request, "Invalid username and/or password.")
+            return HttpResponseRedirect(reverse("login"))
     else:
         return render(request, "network/login.html")
 

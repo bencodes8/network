@@ -2,10 +2,8 @@
 
 {% block body %}
 
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
-
+    {% include "network/alert.html" %}
+    
     <div class="user-form">
         <h2 class="m-2">Login</h2>
 

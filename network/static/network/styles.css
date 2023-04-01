@@ -12,3 +12,152 @@
     width: 350px;
     margin: auto;
 }
+
+.form-control {
+    width: 75%;
+}
+
+.form-control:hover {
+    border: 1px solid #454545;
+}
+
+.left-text {
+    text-align: left;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.post-container {
+    position: relative;
+    min-height: 200px;
+    width: 500px;
+    border: 1px solid #dadce0;
+    border-radius: 10px;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+.edit-div {
+    text-align: right;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title-container > h3 {
+    background-color: #F8F9FA;
+    border-top-left-radius: 10px;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.title-container.with-border > h3 {
+    border-top-right-radius: 10px;
+}
+
+.title-container > h3 {
+    margin: 0;
+}
+
+.title-container > .edit-post,
+.title-container > #edit-cancel,
+.bottom .post-likes > #heart-like,
+.bottom .post-likes > #heart-dislike {
+    background: none;
+    border: none;
+}
+
+.post-container hr {
+    width: 100%;
+    margin: 0;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.content-container > .body-container {
+    box-sizing: content-box;
+    margin: auto;
+    border-left: 1px solid #dadce0;
+    border-right: 1px solid #dadce0;
+    min-height: 200px;
+    width: 90%;
+}
+
+.content-container > .body-container > p {
+    padding: 5px;
+}
+
+.content-container > .bottom {
+    color: #BDC1C6;
+    display: flex;
+    margin: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    padding: 10px;
+}
+
+.bottom > span > a {
+    text-decoration: none;
+}
+
+.post-date {
+    display: flex;
+    flex-direction: column;
+}
+
+#profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#header-container > button {
+    margin-left: 10px;
+    width: 75%;
+    height: 50%;
+}
+
+#follow-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.follow-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.follow-info span {
+    margin: 0 20px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.content-container > .body-container textarea {
+    width: 100%;
+    min-height: 100%;
+    padding: 5px;
+    border: none;
+    outline: none;
+}

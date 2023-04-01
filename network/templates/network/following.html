@@ -1,0 +1,19 @@
+{% extends "network/layout.html" %}
+
+{% load static %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block body %}
+<script src="{% static 'network/post.js' %}"></script>
+<div id="profile-header">
+    <div id="header-container">
+        <h3 style="margin:10px;">@{{ user.username }}'s Followings Page</h3>
+    </div>
+</div>
+<hr>
+<div id="follow-posts">
+    {% include "network/post.html" %}
+    {% include "network/pagination.html" %}
+</div>
+{% endblock %}
